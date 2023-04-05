@@ -29,6 +29,9 @@ contract ERC721AOwnable is Ownable, ERC721ABase {
         return _getAux(owner);
     }
 
+    /**
+     * @dev // If there are multiple variables, please pack them into a uint64.
+     */
     function setAux(address owner, uint64 aux) public virtual onlyOwner {
         _setAux(owner, aux);
     }
