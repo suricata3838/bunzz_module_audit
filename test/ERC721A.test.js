@@ -22,9 +22,9 @@ const createTestSuite = ({ contract, constructorArgs }) =>
     context(`${contract}`, function () {
       beforeEach(async function () {
         this.erc721a = await deployContract(contract, constructorArgs);
-        this.receiver = await deployContract("ERC721ReceiverMock", [
-          RECEIVER_MAGIC_VALUE,
-        ]);
+        // this.receiver = await deployContract("ERC721ReceiverMock", [
+        //   RECEIVER_MAGIC_VALUE,
+        // ]);
         this.startTokenId = this.erc721a.startTokenId
           ? (await this.erc721a.startTokenId()).toNumber()
           : 0;
@@ -552,6 +552,6 @@ describe(
   "ERC721A",
   createTestSuite({
     contract: "ERC721AOwnable",
-    constructorArgs: ["Azuki", "AZUKI"],
+    constructorArgs: ["Azuki", "AZUKI", 0],
   })
 );
