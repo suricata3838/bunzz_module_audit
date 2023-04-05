@@ -14,11 +14,9 @@ import "@openzeppelin/contracts/utils/Address.sol";
  * @dev ERC20 token which has reflection system internally.  
  * - On transfer funcion, the fee mount of the token is deducted from the amount tarnsferred, 
  * and added to 4 recipients; ecoSystem, UniswapV2liquidity, tax vault, owner
- * 
- * - 
  *  
  */
-contract ReflectionToken is IReflectionToken, Ownable {
+contract ReflectionToke is IReflectionToken, Ownable {
     // Review: 
     // - TODO: Should comment that fee vairables are the numerator in case the denominator is maxFee.
     struct FeeTier {

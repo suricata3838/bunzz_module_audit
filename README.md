@@ -10,4 +10,6 @@
 |Scope of review| [Documentation](./doc/ReflectionToken/), [Contract](./contracts/ReflectionToken/)|
 
 ----
-## Action Items
+## Reference of implementation
+
+- https://github.com/reflectfinance/reflect-contracts/blob/main/contracts/REFLECT.sol
