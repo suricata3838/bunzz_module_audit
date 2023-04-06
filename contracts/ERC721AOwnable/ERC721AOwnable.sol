@@ -7,15 +7,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./base/ERC721ABase.sol";
 
 /**
- * @title NFT Sale with bulk mint discount
+ * @title ERC721A + Ownable
  * @author Bunzz, Inc.
  * @custom:version 1.0.9 
- * @notice
  * @dev feature decscirpiton here
  */
 contract ERC721AOwnable is Ownable, ERC721ABase{
 
-    // Review: recomendation to input setBaseURI function and having a reigstered data inside.
+    // Review-4: Need to input setBaseURI(): recomendation to input setBaseURI function and having a reigstered data inside.
     // tokenURI is the string concatination of baseURI and tokenIndex.
     string private _baseURIextended;
 
@@ -29,7 +28,6 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
         string memory symbol_,
         uint256 startTokenId_
     ) ERC721ABase(name_, symbol_, startTokenId_) {
-
     }
 
     function numberMinted(address owner) public view returns (uint256) {
@@ -44,13 +42,12 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
         return _totalMinted();
     }
 
+    // Review-1: can you remove this Aux function?
     function getAux(address owner) public view returns (uint64) {
         return _getAux(owner);
     }
 
-    /**
-     * @dev If there are multiple variables, please pack them into a uint64.
-     */
+    // Review-1: can you remove this Aux function?
     function setAux(address owner, uint64 aux) public virtual onlyOwner {
         _setAux(owner, aux);
     }
@@ -75,7 +72,7 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
         _safeMint(to, quantity);
     }
 
-// Reivew-1: Please remove this functoin. 
+// Reivew-2: Please remove this functoin. 
 // Or input proper whitelist management modifier to control the caller of this funciton.
     function safeMint(
         address to,
@@ -85,7 +82,7 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
         _safeMint(to, quantity, _data);
     }
 
-// Review-2: Write the usage of this mint() funciton.
+// Review-3: Write the usage of this mint() funciton.
 // What is the difference from safeMint if this mint() has same signature of safeMint() and same control level.
     function mint(address to, uint256 quantity) public virtual onlyOwner {
         _mint(to, quantity);
@@ -106,7 +103,7 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
         _burn(tokenId, approvalCheck);
     }
 
-    // Review-3: Need to input setBaseURI()
+    // Review-4: Need to input setBaseURI()
     /**
     * @dev Updates the baseURI that will be used to retrieve NFT metadata.
     * @param baseURI_ The baseURI to be used.
