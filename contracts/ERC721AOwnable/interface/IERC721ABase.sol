@@ -88,7 +88,8 @@ interface IERC721ABase is IERC721, IERC721Metadata {
 
     // Review: the optimization point ERC721A did is to use Bitshift operator.
     // Cf. https://github.com/chiru-labs/ERC721A/blob/main/contracts/ERC721A.sol#L42-L91
-    // If you don't use bit-shift operation, no gas optimazation. No point to name "ERC721A".
+    // If you store data in the struct as follows and no bit-shift operation,
+    // no gas optimazation. No point to name "ERC721A".
 
     // Compiler will pack this into a single 256bit word.
     struct AddressData {
