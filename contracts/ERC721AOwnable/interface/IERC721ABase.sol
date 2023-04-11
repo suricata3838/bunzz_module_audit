@@ -12,67 +12,67 @@ import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
  */
 interface IERC721ABase is IERC721, IERC721Metadata {
     /**
-     * The caller must own the token or be an approved operator.
+     * @dev The caller must own the token or be an approved operator.
      */
     error ApprovalCallerNotOwnerNorApproved();
 
     /**
-     * The token does not exist.
+     * @dev The token does not exist.
      */
     error ApprovalQueryForNonexistentToken();
 
     /**
-     * The caller cannot approve to their own address.
+     * @dev The caller cannot approve to their own address.
      */
     error ApproveToCaller();
 
     /**
-     * The caller cannot approve to the current owner.
+     * @dev The caller cannot approve to the current owner.
      */
     error ApprovalToCurrentOwner();
 
     /**
-     * Cannot query the balance for the zero address.
+     * @dev Cannot query the balance for the zero address.
      */
     error BalanceQueryForZeroAddress();
 
     /**
-     * Cannot mint to the zero address.
+     * @dev Cannot mint to the zero address.
      */
     error MintToZeroAddress();
 
     /**
-     * The quantity of tokens minted must be more than zero.
+     * @dev The quantity of tokens minted must be more than zero.
      */
     error MintZeroQuantity();
 
     /**
-     * The token does not exist.
+     * @dev The token does not exist.
      */
     error OwnerQueryForNonexistentToken();
 
     /**
-     * The caller must own the token or be an approved operator.
+     * @dev The caller must own the token or be an approved operator.
      */
     error TransferCallerNotOwnerNorApproved();
 
     /**
-     * The token must be owned by `from`.
+     * @dev The token must be owned by `from`.
      */
     error TransferFromIncorrectOwner();
 
     /**
-     * Cannot safely transfer to a contract that does not implement the ERC721Receiver interface.
+     * @dev Cannot safely transfer to a contract that does not implement the ERC721Receiver interface.
      */
     error TransferToNonERC721ReceiverImplementer();
 
     /**
-     * Cannot transfer to the zero address.
+     * @dev Cannot transfer to the zero address.
      */
     error TransferToZeroAddress();
 
     /**
-     * The token does not exist.
+     * @dev The token does not exist.
      */
     error URIQueryForNonexistentToken();
 
