@@ -11,8 +11,8 @@ import "./base/ERC721ABase.sol";
  * @author Bunzz, Inc.
  * @custom:version 1.0.9 
  * @dev ERC721 contract which the following features
- * - NFT sale with an adjuctable price.
- * - Reseve function for the contract owner to mint free NFTs.
+ * - NFT sale with an configurable price.
+ * - Reserve function for the contract owner to mint free NFTs.
  * - Fixed maximum supply.
  */
 contract ERC721AOwnable is Ownable, ERC721ABase{

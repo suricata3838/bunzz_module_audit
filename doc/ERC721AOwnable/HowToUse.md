@@ -1,21 +1,28 @@
 # How To Use
 
-## Deployment
-1. Deploy this contract though Bunzz application deploy button.
-
-2. Input the `name`, `symbol` of your NFT token as a module parameter.
-
-
-## (Ideal) Operation
+## Before Deployment
 
 1. Owner will decide following NFT features before starting NFT sale.
 
-- baseURI
+- `baseURI`
+- `price`: price to sell each NFT for investors
+- `maxSupply`: The max amount of NFTs |default 10000
+- `maxMintQuantity`: the max quantity for one investor to mint NFTs|default 3
+- `startTokenId`: tokenId to start counting minted NFTs|usually 0
 
-- maxAmount
+## Deployment
 
-- totalAmount
+1. Deploy this contract though Bunzz application deploy button.
 
+2. Input t `he following module parameters when deployment.  
+`name`, `symbol`, `startTokenId`, `baseURI`, `price`, `maxSupply`
+
+
+## Operation to sell NFTs
+1. Make sure each configuration is correct. If not, you can update by following functions.
+- setBaseURI()
+- setCurrentPrice()
+- setMaxSupply()
 
 2. anyone can mint up to the maximum amount of token by `mint()` function.
 

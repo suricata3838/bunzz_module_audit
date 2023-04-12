@@ -19,7 +19,8 @@ ERC721 Non Fungible Token Standard with gas optimization when minting many NFTs 
 
 "There is no any ready-to-use feature to mention here as it is."
 
-- [ ] Reduced Gas costs when minting many NFTs at the same time.
-- [ ] Whitelist management
-- [ ] Built-in sale with an adjustable price.
-- [ ] Fixed maximum supply.
+ - [x] NFT sale with an configurable price.
+ - [x] Reserve function for the contract owner to mint free NFTs.
+ - [x] Fixed maximum supply.
+ - [ ] Reduced gas costs when minting NFTs at the same time.
+    - once ERC721ABase.sol properly inherits ERC721A, then this feature will be included.

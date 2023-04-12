@@ -1,14 +1,33 @@
 # Function
 
 ## WRITE
-### safeMint
+### mint
 
 ```solidity
-function safeMint(address to, uint256 quantity) public virtual
+function mint(uint256 quantity) public payable
 ```
 
-only contact owner can mint a `quantity` of NFT.
-Requirements: no
+anyone can mint the `quantity` of NFT up to `maxMintQuantity`.
+Requirements:
+- the max mintable qunatitiy for one user is `maxMintQuantity`.
+- total quantity of NFT will not be exceed the `maxSupply`.
+- sender should pay the exact amount of price * quantity.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| quantity | uint256 | the quantity of minting NFT |
+
+### ownerMint
+
+```solidity
+function ownerMint(address to, uint256 quantity) public
+```
+
+only contact owner can mint a `quantity` of NFT for free.
+Requirements:
+- total quantity of NFT will not be exceed the maxSupply.
 
 #### Parameters
 
@@ -17,14 +36,6 @@ Requirements: no
 | to | address | the receiver's wallet address |
 | quantity | uint256 | the quantity of minting NFT |
 
-### mint
-
-```solidity
-function mint(address to, uint256 quantity) public virtual
-```
-
-Only contact owner can mint a `quantity` of NFT.
-Requirements: no.
 
 #### Parameters
 
@@ -47,13 +58,13 @@ Only contact owner can burn the NFT token by specifing the tokenId.
 | ---- | ---- | ----------- |
 | tokenId | uint256 | the tokenId of NFT |
 
-### burnWithApprovalCheck
+### withdraw
 
 ```solidity
-function burnWithApprovalCheck(uint256 tokenId, bool approvalCheck) public virtual
+function withdraw() external
 ```
 
-see ERC721ABase-_burn()
+A way for the owner to withdraw all proceeds from the sale.
 
 ### setBaseURI
 
@@ -69,19 +80,55 @@ Updates the baseURI that will be used to retrieve NFT metadata.
 | ---- | ---- | ----------- |
 | baseURI_ | string | The baseURI to be used. |
 
-### totalMinted
-
-```solidity
-function totalMinted() public view returns (uint256)
-```
-
-reutrn the number of all minted tokens without considering burned tokens.
-
 #### Return Values
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | [0] | string | (string memory) Base URI |
+
+### setMaxSupply
+
+```solidity
+function setMaxSupply(uint256 _maxSupply) public
+```
+
+Only contract owner can update the total supply of NFTs.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| _maxSupply | uint256 | the quantity of total amount |
+
+### setCurrentPrice
+
+```solidity
+function setCurrentPrice(uint256 price) external
+```
+
+Sets the price of each NFT during the initial sale.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| price | uint256 | The price of each NFT during the initial sale | precision:18 |
+
+
+### setMaxMintQuantity
+
+```solidity
+function setMaxMintQuantity(uint256 _maxMintQuantity) public
+```
+
+Only contract owner can update the maximum quantity for one user to mint NFT.
+The default is 3 for one wallet address.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| _maxMintQuantity | uint256 | the maximum quantity of NFTs |
 
 ### approve
 
@@ -283,3 +330,11 @@ function isApprovedForAll(address owner, address operator) public view virtual r
 ```
 
 See {IERC721-isApprovedForAll}.
+
+### totalMinted
+
+```solidity
+function totalMinted() public view returns (uint256)
+```
+
+reutrn the number of all minted tokens without considering burned tokens.
