@@ -5,7 +5,6 @@ Emitted when `tokenId` token is transferred from `from` to `to`.
 event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
 ```
 
-
 ### Approval
 Emitted when `owner` enables `approved` to manage the `tokenId` token.
 
