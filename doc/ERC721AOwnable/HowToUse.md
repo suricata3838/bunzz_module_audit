@@ -25,3 +25,5 @@
 
 
 ## Operation Diagram
+
+![ERC721AOwnable-Diagram](./image/ERC721AOwnable-Diagram1.jpg)
