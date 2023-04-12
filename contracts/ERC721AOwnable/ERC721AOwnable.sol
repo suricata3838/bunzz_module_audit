@@ -54,7 +54,7 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
     * @param to the receiver's wallet address
     * @param quantity the quantity of minting NFT
     */
-    function ownerMint(address to, uint256 quantity) public virtual onlyOwner {
+    function ownerMint(address to, uint256 quantity) public payable onlyOwner {
         uint256 ts = totalSupply();
         require(ts + quantity <= maxSupply, "Exceed totalSuuply");
         require(
@@ -71,7 +71,7 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
     * - TODO
     * @param quantity the quantity of minting NFT
     */
-    function mint(uint256 quantity) public virtual {
+    function mint(uint256 quantity) public payable {
         uint256 ts = totalSupply();
         require(ts + quantity <= maxSupply, "Exceed totalSuuply");
         require(_numberMinted(msg.sender) + quantity <= maxMintQuantity, "Too many NFT to mint for you.");
