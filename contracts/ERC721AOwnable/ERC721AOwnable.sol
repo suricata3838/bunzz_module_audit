@@ -11,12 +11,12 @@ import "./base/ERC721ABase.sol";
  * @author Bunzz, Inc.
  * @custom:version 1.0.9 
  * @dev ERC721 contract which the following features
- * - TODO
+ * - NFT sale with an adjuctable price.
+ * - Reseve function for the contract owner to mint free NFTs.
+ * - Fixed maximum supply.
  */
 contract ERC721AOwnable is Ownable, ERC721ABase{
 
-    // Review-4: Need to input setBaseURI(): recomendation to input setBaseURI function and having a reigstered data inside.
-    // tokenURI is the string concatination of baseURI and tokenIndex.
     string private _baseURIextended;
     uint256 public maxMintQuantity = 3;
     uint256 public maxSupply;
@@ -48,19 +48,15 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
  */
 
   /**
-    * @dev only contact owner can mint a `quantity` of NFT.
+    * @dev only contact owner can mint a `quantity` of NFT for free.
     * Requirements:
-    * - TODO
+    * - total quantity of NFT will not be exceed the maxSupply.
     * @param to the receiver's wallet address
     * @param quantity the quantity of minting NFT
     */
-    function ownerMint(address to, uint256 quantity) public payable onlyOwner {
+    function ownerMint(address to, uint256 quantity) public onlyOwner {
         uint256 ts = totalSupply();
         require(ts + quantity <= maxSupply, "Exceed totalSuuply");
-        require(
-            currentPrice * quantity == msg.value,
-            "Value sent is not correct"
-        );
 
         _safeMint(to, quantity);
     }
@@ -68,7 +64,9 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
   /**
     * @dev anyone can mint the `quantity` of NFT up to `maxMintQuantity`.
     * Requirements:
-    * - TODO
+    * - the max mintable qunatitiy for one user is `maxMintQuantity`.
+    * - total quantity of NFT will not be exceed the `maxSupply`.
+    * - sender should pay the exact amount of price * quantity.
     * @param quantity the quantity of minting NFT
     */
     function mint(uint256 quantity) public payable {
@@ -121,7 +119,7 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
     }
 
    /**
-    * @dev Only contract owner can update the total quantity of NFTs.
+    * @dev Only contract owner can update the total supply of NFTs.
     * @param _maxSupply the quantity of total amount
     */
     function setMaxSupply(uint256 _maxSupply) public onlyOwner {
