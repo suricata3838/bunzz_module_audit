@@ -11,7 +11,7 @@ import "./base/ERC721ABase.sol";
  * @author Bunzz, Inc.
  * @custom:version 1.0.9 
  * @dev ERC721 contract which the following features
- * - 
+ * - TODO
  */
 contract ERC721AOwnable is Ownable, ERC721ABase{
 
@@ -19,7 +19,7 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
     // tokenURI is the string concatination of baseURI and tokenIndex.
     string private _baseURIextended;
     uint256 public maxMintQuantity = 3;
-    uint256 public maxSupply = 10000;
+    uint256 public maxSupply;
     uint256 public currentPrice;
 
     /**
@@ -27,7 +27,7 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
      * @param symbol_ NFT Symbol
      * @param startTokenId_ the starting number of tokenId
      * @param baseURI_ basement of URI concatinating with tokenId
-     * @param currentPrice_ price to sale NFT
+     * @param price the price to sale NFT in Ethereum| precision:18
      * @param maxSupply_ the maximum supply of all NFTs
      */
     constructor(
@@ -35,11 +35,11 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
         string memory symbol_,
         uint256 startTokenId_,
         string memory baseURI_,
-        uint256 currentPrice_,
+        uint256 price,
         uint256 maxSupply_
     ) ERC721ABase(name_, symbol_, startTokenId_) {
         _baseURIextended = baseURI_;
-        currentPrice = currentPrice_;
+        currentPrice = price;
         maxSupply = maxSupply_;
     }
 
@@ -49,27 +49,38 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
 
   /**
     * @dev only contact owner can mint a `quantity` of NFT.
-    * Requirements: no.
+    * Requirements:
+    * - TODO
     * @param to the receiver's wallet address
     * @param quantity the quantity of minting NFT
     */
     function ownerMint(address to, uint256 quantity) public virtual onlyOwner {
-        require(totalSupply() + quantity <= maxSupply, "Exceed totalSuuply");
+        uint256 ts = totalSupply();
+        require(ts + quantity <= maxSupply, "Exceed totalSuuply");
+        require(
+            currentPrice * quantity == msg.value,
+            "Value sent is not correct"
+        );
+
         _safeMint(to, quantity);
     }
 
   /**
     * @dev anyone can mint the `quantity` of NFT up to `maxMintQuantity`.
     * Requirements:
-    * - 
-    * @param to the receiver's wallet address
+    * - TODO
     * @param quantity the quantity of minting NFT
     */
-    function mint(address to, uint256 quantity) public virtual {
-        require(totalSupply() + quantity <= maxSupply, "Exceed totalSuuply");
-        require(_numberMinted(to) + quantity <= maxMintQuantity, "Too many NFT to mint for you.");
+    function mint(uint256 quantity) public virtual {
+        uint256 ts = totalSupply();
+        require(ts + quantity <= maxSupply, "Exceed totalSuuply");
+        require(_numberMinted(msg.sender) + quantity <= maxMintQuantity, "Too many NFT to mint for you.");
+        require(
+            currentPrice * quantity == msg.value,
+            "Value sent is not correct"
+        );
 
-        _safeMint(to, quantity);
+        _safeMint(msg.sender, quantity);
     }
 
   /** 
@@ -110,11 +121,11 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
     }
 
    /**
-    * @dev Only contract owner can update the total quantity of NFTs. The default is 10000.
-    * @param _totalAmount the quantity of total amount
+    * @dev Only contract owner can update the total quantity of NFTs.
+    * @param _maxSupply the quantity of total amount
     */
-    function setTotalAmount(uint256 _totalAmount) public onlyOwner {
-        maxSupply = _totalAmount;
+    function setMaxSupply(uint256 _maxSupply) public onlyOwner {
+        maxSupply = _maxSupply;
     }
 
 
