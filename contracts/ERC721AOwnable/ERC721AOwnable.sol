@@ -18,18 +18,34 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
     // Review-4: Need to input setBaseURI(): recomendation to input setBaseURI function and having a reigstered data inside.
     // tokenURI is the string concatination of baseURI and tokenIndex.
     string private _baseURIextended;
+    uint256 public maxMintQuantity = 3;
+    uint256 public maxSupply = 10000;
+    uint256 public currentPrice;
 
     /**
      * @param name_ NFT Name
      * @param symbol_ NFT Symbol
-     * @param startTokenId_ the first tokenId of NFT 
+     * @param startTokenId_ the starting number of tokenId
+     * @param baseURI_ basement of URI concatinating with tokenId
+     * @param currentPrice_ price to sale NFT
+     * @param maxSupply_ the maximum supply of all NFTs
      */
     constructor(
         string memory name_,
         string memory symbol_,
-        uint256 startTokenId_
+        uint256 startTokenId_,
+        string memory baseURI_,
+        uint256 currentPrice_,
+        uint256 maxSupply_
     ) ERC721ABase(name_, symbol_, startTokenId_) {
+        _baseURIextended = baseURI_;
+        currentPrice = currentPrice_;
+        maxSupply = maxSupply_;
     }
+
+/**
+ * Main operation functions
+ */
 
   /**
     * @dev only contact owner can mint a `quantity` of NFT.
@@ -37,30 +53,23 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
     * @param to the receiver's wallet address
     * @param quantity the quantity of minting NFT
     */
-    function safeMint(address to, uint256 quantity) public virtual onlyOwner {
+    function ownerMint(address to, uint256 quantity) public virtual onlyOwner {
+        require(totalSupply() + quantity <= maxSupply, "Exceed totalSuuply");
         _safeMint(to, quantity);
     }
 
-// Reivew-2: Please remove this functoin. 
-// Or input proper whitelist management modifier to control the caller of this funciton.
-    // function safeMint(
-    //     address to,
-    //     uint256 quantity,
-    //     bytes memory _data
-    // ) public virtual {
-    //     _safeMint(to, quantity, _data);
-    // }
-
-// Review-3: Write the usage of this mint() funciton.
-// What is the difference from safeMint if this mint() has same signature of safeMint() and same control level.
   /**
-    * @dev Only contact owner can mint a `quantity` of NFT.
-    * Requirements: no.
-    * @param to the receiver address
+    * @dev anyone can mint the `quantity` of NFT up to `maxMintQuantity`.
+    * Requirements:
+    * - 
+    * @param to the receiver's wallet address
     * @param quantity the quantity of minting NFT
     */
-    function mint(address to, uint256 quantity) public virtual onlyOwner {
-        _mint(to, quantity);
+    function mint(address to, uint256 quantity) public virtual {
+        require(totalSupply() + quantity <= maxSupply, "Exceed totalSuuply");
+        require(_numberMinted(to) + quantity <= maxMintQuantity, "Too many NFT to mint for you.");
+
+        _safeMint(to, quantity);
     }
 
   /** 
@@ -71,21 +80,18 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
         _burn(tokenId);
     }
 
-// Review: if you don't explain how to use approvalCheck, please delete this function.
-// /**
-//  * @dev see {ERC721ABase-_burn}
-//  */
-//     function burnWithApprovalCheck(
-//         uint256 tokenId,
-//         bool approvalCheck
-//     ) public virtual onlyOwner {
-//         _burn(tokenId, approvalCheck);
-//     }
+    /**
+     * @dev A way for the owner to withdraw all proceeds from the sale.
+     */
+    function withdraw() external onlyOwner {
+        uint256 balance = address(this).balance;
+        payable(msg.sender).transfer(balance);
+    }
 
-  /**
-   * Setter functions
-   */
-    // Review-4: Need to input setBaseURI()
+/**
+ * Setter functions
+ */
+
    /**
     * @dev Updates the baseURI that will be used to retrieve NFT metadata.
     * @param baseURI_ The baseURI to be used.
@@ -94,14 +100,36 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
         _baseURIextended = baseURI_;
     }
 
-    // Review-1: can you remove this Aux function?
-    // function setAux(address owner, uint64 aux) public virtual onlyOwner {
-    //     _setAux(owner, aux);
-    // }
+   /**
+    * @dev Only contract owner can update the maximum quantity for one user to mint NFT.
+    * The default is 3 for one wallet address.
+    * @param _maxMintQuantity the maximum quantity of NFTs
+    */
+    function setMaxMintQuantity(uint256 _maxMintQuantity) public onlyOwner {
+        maxMintQuantity = _maxMintQuantity;
+    }
 
-  /**
-   * Getter functions
-   */
+   /**
+    * @dev Only contract owner can update the total quantity of NFTs. The default is 10000.
+    * @param _totalAmount the quantity of total amount
+    */
+    function setTotalAmount(uint256 _totalAmount) public onlyOwner {
+        maxSupply = _totalAmount;
+    }
+
+
+    /**
+     * @dev Sets the price of each NFT during the initial sale.
+     * @param price The price of each NFT during the initial sale | precision:18
+     */
+    function setCurrentPrice(uint256 price) external onlyOwner {
+        currentPrice = price;
+    }
+
+
+/**
+ * Getter functions
+ */
 
   /**
    * @dev Orverride baseURI which will be concatiated with tokenIndex to get the tokenURI.
@@ -135,11 +163,6 @@ contract ERC721AOwnable is Ownable, ERC721ABase{
     function totalMinted() public view returns (uint256) {
         return _totalMinted();
     }
-
-    // Review-1: can you remove this Aux function?
-    // function getAux(address owner) public view returns (uint64) {
-    //     return _getAux(owner);
-    // }
 
    /**
     * @dev getter of _baseURI
