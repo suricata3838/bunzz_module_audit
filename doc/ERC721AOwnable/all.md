@@ -1,3 +1,91 @@
+# ERC721AOwnable
+# About
+> Style: 2-3 lines description  
+> Content: What issue does this module solve?
+
+ERC721 Non Fungible Token Standard with gas optimization when minting many NFTs at the same time.
+
+## Tags
+> 5-7 keywords about the contract which will later be used for search.
+> Content: use-case in the biz term, technical traits
+
+- token
+- ERC721
+- NFT
+- NFT Sale
+
+## Features
+> Style: bullet points  
+> Content: Who-How-What
+
+"There is no any ready-to-use feature to mention here as it is."
+
+ - [x] NFT sale with an configurable price.
+ - [x] Reserve function for the contract owner to mint free NFTs.
+ - [x] Fixed maximum supply.
+ - [ ] Reduced gas costs when minting NFTs at the same time.
+    - once ERC721ABase.sol properly inherits ERC721A, then this feature will be included.
+
+# How To Use
+
+## Before Deployment
+
+1. Owner will decide following NFT features before starting NFT sale.
+
+- `baseURI`
+- `price`: price to sell each NFT for investors
+- `maxSupply`: The max amount of NFTs |default 10000
+- `maxMintQuantity`: the max quantity for one investor to mint NFTs|default 3
+- `startTokenId`: tokenId to start counting minted NFTs|usually 0
+
+## Deployment
+
+1. Deploy this contract though Bunzz application deploy button.
+
+2. Input t `he following module parameters when deployment.  
+`name`, `symbol`, `startTokenId`, `baseURI`, `price`, `maxSupply`
+
+
+## Operation to sell NFTs
+1. Make sure each configuration is correct. If not, you can update by following functions.
+- setBaseURI()
+- setCurrentPrice()
+- setMaxSupply()
+
+2. anyone can mint up to the maximum amount of token by `mint()` function.
+
+3. Only Owner can mint any arbitrary amount of NFTs from `ownerMint()` function.
+
+4. After the NFT sale is finished, only owner can withdraw the ethereum stored on contact by `withdraw()` function.
+
+
+## Operation Diagram
+
+![ERC721AOwnable-Diagram](./image/ERC721AOwnable-Diagram1.jpg)
+
+# Module Parameters
+## ERC721AOwnable
+
+ERC721 contract which the following features
+- NFT sale with an configurable price.
+- Reserve function for the contract owner to mint free NFTs.
+- Fixed maximum supply.
+
+```solidity
+constructor(string name_, string symbol_, uint256 startTokenId_, string baseURI_, uint256 price, uint256 maxSupply_) public
+```
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| name_ | string | NFT Name |
+| symbol_ | string | NFT Symbol |
+| startTokenId_ | uint256 | the starting number of tokenId |
+| baseURI_ | string | basement of URI concatinating with tokenId |
+| price | uint256 | the price to sale NFT in Ethereum| precision:18 |
+| maxSupply_ | uint256 | the maximum supply of all NFTs |
+
 # Function
 
 ## WRITE
@@ -337,4 +425,29 @@ See {IERC721-isApprovedForAll}.
 function totalMinted() public view returns (uint256)
 ```
 
-reutrn the number of all minted tokens without considering burned tokens.
+return the number of all minted tokens without considering burned tokens.
+
+# Event
+
+### Transfer
+Emitted when `tokenId` token is transferred from `from` to `to`.
+
+``` solidity
+event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+```
+
+### Approval
+Emitted when `owner` enables `approved` to manage the `tokenId` token.
+
+``` solidity
+event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
+```
+
+### ApprovalForAll
+Emitted when `owner` enables or disables (`approved`) `operator` to manage all of its assets.
+
+``` solidity
+event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+```
+
+### OwnershipTransferred
