@@ -47,10 +47,9 @@ contract ERC721AOwnable is Ownable, ERC721ABase {
         uint256 mintPrice_
     ) ERC721ABase(name_, symbol_, startTokenId_) {
         _baseURIextended = baseURI_;
-        currentPrice = price;
         maxMintPerWallet = maxMintPerWallet_;
         maxTotalSupply = maxTotalSupply_;
-        mintPrice = _mintPrice;
+        mintPrice = mintPrice_;
     }
 
     /**
