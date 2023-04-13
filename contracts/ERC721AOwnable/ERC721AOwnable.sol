@@ -8,18 +8,13 @@ import "./base/ERC721ABase.sol";
 
 /**
  * @title ERC721A-based NFT sale contract
- * @author Bunzz, Inc.
- * @custom:version 1.0.9
+ * @author kazunetakeda25
+ * @custom:version 1.0.2
  * @dev ERC721 contract which the following features
  * - NFT sale with an configurable price.
  * - Reserve function for the contract owner to mint free NFTs.
  * - Fixed maximum supply.
  */
-
-// Errors
-error ExceedMaxTotalSupply();
-error ExceedMaxMintPerWallet();
-error InsufficientMintAmount();
 
 contract ERC721AOwnable is Ownable, ERC721ABase {
     string private _baseURIextended;
@@ -27,6 +22,11 @@ contract ERC721AOwnable is Ownable, ERC721ABase {
     uint256 public maxMintPerWallet;
     uint256 public maxTotalSupply;
     uint256 public mintPrice;
+
+    // Errors
+    error ExceedMaxTotalSupply();
+    error ExceedMaxMintPerWallet();
+    error InsufficientMintAmount();
 
     /**
      * @param name_ NFT Name
